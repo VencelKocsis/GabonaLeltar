@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="hu.bme.aut.android.gabonaleltar.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_purchaseFragment"
+            app:destination="@id/purchaseFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_storageFragment"
+            app:destination="@id/storageFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_diagramFragment"
+            app:destination="@id/diagramFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/purchaseFragment"
+        android:name="hu.bme.aut.android.gabonaleltar.grain.PurchaseFragment"
+        android:label="fragment_purchase"
+        tools:layout="@layout/fragment_purchase" />
+    <fragment
+        android:id="@+id/transactionFragment"
+        android:name="hu.bme.aut.android.gabonaleltar.transaction.TransactionFragment"
+        android:label="fragment_transaction"
+        tools:layout="@layout/fragment_transaction" />
+    <fragment
+        android:id="@+id/storageFragment"
+        android:name="hu.bme.aut.android.gabonaleltar.storage.StorageFragment"
+        android:label="fragment_storage"
+        tools:layout="@layout/fragment_storage" />
+    <fragment
+        android:id="@+id/diagramFragment"
+        android:name="hu.bme.aut.android.gabonaleltar.diagram.DiagramFragment"
+        android:label="fragment_diagram"
+        tools:layout="@layout/fragment_diagram" />
+</navigation>
