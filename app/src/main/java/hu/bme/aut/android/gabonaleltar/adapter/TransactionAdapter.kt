@@ -2,11 +2,13 @@ package hu.bme.aut.android.gabonaleltar.adapter
 
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import hu.bme.aut.android.gabonaleltar.R
 import hu.bme.aut.android.gabonaleltar.data.TransactionItem
 import hu.bme.aut.android.gabonaleltar.databinding.ItemTransactionListBinding
 import hu.bme.aut.android.gabonaleltar.transaction.TransactionViewModel
@@ -17,7 +19,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class TransactionAdapter(private val transactionList: LiveData<List<TransactionItem>>,
-                         private var transactionViewModel: TransactionViewModel) :
+                         private var transactionViewModel: TransactionViewModel,
+                         private val layoutResourceId: Int) :
     RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     private val items = mutableListOf<TransactionItem>()
@@ -38,9 +41,20 @@ class TransactionAdapter(private val transactionList: LiveData<List<TransactionI
             notifyDataSetChanged()
         })
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TransactionViewHolder(
+    /*override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TransactionViewHolder(
         ItemTransactionListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
+    )*/
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemTransactionListBinding.inflate(inflater, parent, false)
+
+        if(layoutResourceId == R.layout.storage_selected_grain) {
+            binding.ibDelete.visibility = View.GONE
+        }
+
+        return TransactionViewHolder(binding)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
@@ -112,6 +126,12 @@ class TransactionAdapter(private val transactionList: LiveData<List<TransactionI
 
     fun deleteAll() {
         items.clear()
+        notifyDataSetChanged()
+    }
+
+    fun updateData(newData: List<TransactionItem>) {
+        items.clear()
+        items.addAll(newData)
         notifyDataSetChanged()
     }
 

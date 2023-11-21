@@ -3,6 +3,7 @@ package hu.bme.aut.android.gabonaleltar.transaction
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import hu.bme.aut.android.gabonaleltar.data.GrainDatabase
 import hu.bme.aut.android.gabonaleltar.data.GrainItem
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 class TransactionViewModel(application: Application) : AndroidViewModel(application) {
     private val transactionItemDao: TransactionItemDAO
     private val allTransactionItems: LiveData<List<TransactionItem>>
+    private val selectedTransactionItems = MutableLiveData<List<TransactionItem>?>()
 
     init {
         val database = GrainDatabase.getInstance(application)
@@ -51,5 +53,25 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 
     fun getTransactionItems(): LiveData<List<TransactionItem>> {
         return allTransactionItems
+    }
+
+    fun getSelectedTransactionItems(): MutableLiveData<List<TransactionItem>?> {
+        return selectedTransactionItems
+    }
+
+    fun updateSelectedTransactionItems(selectedGrain: Long) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val allTransactions = allTransactionItems.value
+
+                // Filter the transactions based on the selectedGrain
+                val filteredTransactions = allTransactions?.filter { transaction ->
+                    transaction.grainId == selectedGrain
+                }
+
+                // Update the MutableLiveData with the filtered list
+                selectedTransactionItems.postValue(filteredTransactions)
+            }
+        }
     }
 }

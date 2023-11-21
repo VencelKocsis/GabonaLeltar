@@ -38,13 +38,11 @@ class TransactionFragment: Fragment() {
 
         return binding.root
     }
-
-    private fun initRecyclerView() {
-        adapter = TransactionAdapter(sharedViewModel.getTransactionItems(), sharedViewModel)
+    fun initRecyclerView() {
+        adapter = TransactionAdapter(sharedViewModel.getTransactionItems(), sharedViewModel, R.layout.item_transaction_list)
         binding.rvTransaction.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTransaction.adapter = adapter
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_transaction, menu)
     }
