@@ -23,4 +23,7 @@
     <string name="input_amount">Adja meg az értéket:</string>
     <string name="remove_grain">-</string>
     <string name="add_grain">+</string>
+    <string name="newPriceHint">Új ár: (Kg/Ft)</string>
+    <string name="modifyPrice">Módosít</string>
+    <string name="CBModifyPrice">Árváltozás</string>
 </resources>

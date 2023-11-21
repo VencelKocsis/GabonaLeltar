@@ -94,6 +94,14 @@ class StorageFragment : Fragment() {
             modifyGrain(selectedGrain, amount, "-")
         }
 
+        binding.btnCnagePrice.setOnClickListener {
+            if (binding.cbPriceChange.isChecked && binding.edNewPrice.text.isNotEmpty() && !binding.edNewPrice.text.equals(0)) {
+                val selectedGrain = spinner.selectedItem as String
+                val newPrice = binding.edNewPrice.text.toString().toInt()
+                modifyGrain(selectedGrain, newPrice)
+            }
+        }
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener,
             AdapterView.OnItemClickListener {
             override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
@@ -157,6 +165,20 @@ class StorageFragment : Fragment() {
                     activity?.runOnUiThread {
                         Toast.makeText(context, "Nem lehet negatív szám a raktárban", Toast.LENGTH_LONG).show()
                     }
+                }
+            }
+        }
+    }
+
+    private fun modifyGrain(selectedGrain: String, newPrice: Int) {
+        thread {
+            val grainItem: GrainItem? = database.grainDao().getGrainByName(selectedGrain)
+            if(grainItem != null) {
+                val oldPrice = grainItem.price
+                grainItem.price = newPrice
+                database.grainDao().update(grainItem)
+                activity?.runOnUiThread {
+                    Toast.makeText(context, "$selectedGrain ára módosítva lett $oldPrice (Kg/Ft)-ról $newPrice (Kg/Ft)-ra", Toast.LENGTH_LONG).show()
                 }
             }
         }
