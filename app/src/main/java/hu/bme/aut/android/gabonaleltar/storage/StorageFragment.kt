@@ -159,7 +159,7 @@ class StorageFragment : Fragment() {
                     grainItem.amount = newAmount
                     database.grainDao().update(grainItem)
                     activity?.runOnUiThread {
-                        Toast.makeText(context, "${amount} tonna ${grainItem.name} ${modifier}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "${amount} Kg ${grainItem.name} ${modifier}", Toast.LENGTH_LONG).show()
                     }
                 } else {
                     activity?.runOnUiThread {

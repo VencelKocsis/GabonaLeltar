@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import hu.bme.aut.android.gabonaleltar.R
 import hu.bme.aut.android.gabonaleltar.data.GrainItem
 import hu.bme.aut.android.gabonaleltar.databinding.DialogPurchaseItemBinding
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 class ItemPurchaseDialogFragment : DialogFragment() {
 
@@ -28,7 +30,6 @@ class ItemPurchaseDialogFragment : DialogFragment() {
             val fragment = ItemPurchaseDialogFragment()
             fragment.grainItem = grainItem
             return fragment
-
         }
     }
     override fun onAttach(context: Context) {
@@ -40,10 +41,15 @@ class ItemPurchaseDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogPurchaseItemBinding.inflate(LayoutInflater.from(context))
 
+        val decimalFormatSymbols = DecimalFormatSymbols()
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("###,###,###", decimalFormatSymbols)
+        val formattedAmount = decimalFormat.format(grainItem.amount)
+
         binding.ivPurchaseGrain.setImageResource(grainItem.imageResourceId)
         binding.tvPurchaseName.text = "${grainItem.name} vásárlás"
-        binding.tvPurchasePrice.text = "Ár: ${grainItem.price} Ft/kg"
-        binding.tvRemainingAmount.text = "Raktáron: ${grainItem.amount} tonna"
+        binding.tvPurchasePrice.text = "Ár: ${grainItem.price} Ft/Kg"
+        binding.tvRemainingAmount.text = "Raktáron: ${formattedAmount} Kg"
 
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)

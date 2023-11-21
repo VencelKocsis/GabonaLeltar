@@ -60,13 +60,14 @@ class TransactionAdapter(private val transactionList: LiveData<List<TransactionI
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transactionItem = items[position]
         val decimalFormatSymbols = DecimalFormatSymbols()
-        decimalFormatSymbols.groupingSeparator = '.'
-        val decimalFormat = DecimalFormat("#,###.##", decimalFormatSymbols)
-        val formattedTotalCost = decimalFormat.format(transactionItem.totalCost * 1000)
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("###,###,###", decimalFormatSymbols)
+        val formattedTotalCost = decimalFormat.format(transactionItem.totalCost)
+        val formattedAmount = decimalFormat.format(transactionItem.amount)
 
         holder.binding.tvTRDate.text = formattedDate
         holder.binding.tvTRName.text = getGrainNameById(transactionItem.grainId)
-        holder.binding.tvTRAmount.text = "${transactionItem.amount} tonna"
+        holder.binding.tvTRAmount.text = "${formattedAmount} Kg"
         holder.binding.tvTRIncome.text = "${formattedTotalCost} Ft"
 
         holder.binding.ibDelete.setOnClickListener {

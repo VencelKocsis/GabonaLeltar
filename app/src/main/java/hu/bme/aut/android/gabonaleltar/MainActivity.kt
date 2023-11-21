@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), ItemPurchaseDialogFragment.PurchaseIte
 
     override fun onGrainItemPurchased(grainItem: GrainItem, purchasedAmount: Int) {
         if(sharedViewModel.onGrainItemPurchased(grainItem, purchasedAmount)) {
-            Toast.makeText(this, "${grainItem.name} vásárlás megtörtént: ${purchasedAmount} tonna", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "${grainItem.name} vásárlás megtörtént: ${purchasedAmount} Kg", Toast.LENGTH_LONG).show()
             transactionViewModel.insertTransaction(grainItem, purchasedAmount)
         } else {
             Toast.makeText(this, "vásárlás nem sikerült", Toast.LENGTH_LONG).show()
