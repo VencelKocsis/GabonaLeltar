@@ -43,9 +43,6 @@ class TransactionAdapter(private val transactionList: LiveData<List<TransactionI
             notifyDataSetChanged()
         })
     }
-    /*override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TransactionViewHolder(
-        ItemTransactionListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -76,16 +73,6 @@ class TransactionAdapter(private val transactionList: LiveData<List<TransactionI
             onDeleteTransactionItem(holder.binding, transactionItem)
         }
     }
-
-    /*private fun onDeleteTransactionItem(transactionItem: TransactionItem) {
-        //transactionViewModel.deleteTransactionItem(transactionItem)
-        val context = binding.root.context
-        val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-        val deleteDialog = ConfirmDeleteDialogFragment {
-            transactionViewModel.deleteTransactionItem(transactionItem)
-        }
-        deleteDialog.show(fragmentManager, "DeleteTransactionDialog")
-    }*/
 
     override fun getItemCount(): Int = items.size
 
