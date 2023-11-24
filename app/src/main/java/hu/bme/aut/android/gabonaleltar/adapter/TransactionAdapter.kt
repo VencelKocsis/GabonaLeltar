@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.gabonaleltar.R
 import hu.bme.aut.android.gabonaleltar.data.TransactionItem
 import hu.bme.aut.android.gabonaleltar.databinding.ItemTransactionListBinding
+import hu.bme.aut.android.gabonaleltar.transaction.ConfirmDeleteDialogFragment
 import hu.bme.aut.android.gabonaleltar.transaction.TransactionViewModel
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -71,13 +73,19 @@ class TransactionAdapter(private val transactionList: LiveData<List<TransactionI
         holder.binding.tvTRIncome.text = "${formattedTotalCost} Ft"
 
         holder.binding.ibDelete.setOnClickListener {
-            onDeleteTransactionItem(transactionItem)
+            onDeleteTransactionItem(holder.binding, transactionItem)
         }
     }
 
-    private fun onDeleteTransactionItem(transactionItem: TransactionItem) {
-        transactionViewModel.deleteTransactionItem(transactionItem)
-    }
+    /*private fun onDeleteTransactionItem(transactionItem: TransactionItem) {
+        //transactionViewModel.deleteTransactionItem(transactionItem)
+        val context = binding.root.context
+        val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+        val deleteDialog = ConfirmDeleteDialogFragment {
+            transactionViewModel.deleteTransactionItem(transactionItem)
+        }
+        deleteDialog.show(fragmentManager, "DeleteTransactionDialog")
+    }*/
 
     override fun getItemCount(): Int = items.size
 
@@ -136,5 +144,21 @@ class TransactionAdapter(private val transactionList: LiveData<List<TransactionI
         notifyDataSetChanged()
     }
 
-    inner class TransactionViewHolder(val binding: ItemTransactionListBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class TransactionViewHolder(val binding: ItemTransactionListBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.ibDelete.setOnClickListener {
+                onDeleteTransactionItem(binding, items[adapterPosition])
+            }
+        }
+    }
+
+    private fun onDeleteTransactionItem(binding: ItemTransactionListBinding, transactionItem: TransactionItem) {
+        val context = binding.root.context
+        val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+        val deleteDialog = ConfirmDeleteDialogFragment {
+            // Callback to delete the transaction
+            transactionViewModel.deleteTransactionItem(transactionItem)
+        }
+        deleteDialog.show(fragmentManager, "DeleteTransactionDialog")
+    }
 }

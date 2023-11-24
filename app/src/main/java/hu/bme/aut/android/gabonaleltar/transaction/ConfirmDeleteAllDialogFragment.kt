@@ -16,7 +16,7 @@ class ConfirmDeleteAllDialogFragment(private val adapter: TransactionAdapter) : 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
-            .setMessage("Biztosan ki szeretnéd törölni az összes tranzakciót?")
+            .setMessage("Biztosan kitörlöd az összes tranzakciót?")
             .setPositiveButton(R.string.yes) { _, _ -> onDeleteAll() }
             .setNegativeButton(R.string.no, null)
             .show()
