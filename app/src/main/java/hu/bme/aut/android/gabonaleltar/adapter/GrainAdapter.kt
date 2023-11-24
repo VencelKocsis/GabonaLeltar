@@ -33,6 +33,21 @@ class GrainAdapter(private val grainList: LiveData<List<GrainItem>>) :
         holder.binding.tvName.text = grainItem.name
 
         holder.itemView.setOnClickListener {
+
+            holder.binding.layout.requestFocus()
+
+            // Play a scale animation on ImageButton
+            holder.binding.ibGrain.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction {
+                // Reset the scale to its original size
+                holder.binding.ibGrain.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+            }.start()
+
+            // Play a scale animation on TextView
+            holder.binding.tvName.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction {
+                // Reset the scale to its original size
+                holder.binding.tvName.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+            }.start()
+
             val fragmentManager = (holder.binding.root.context as AppCompatActivity).supportFragmentManager
             val dialogFragment = ItemPurchaseDialogFragment.newInstance(grainItem)
             dialogFragment.show(fragmentManager, "Purchase Item")
