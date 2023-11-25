@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">GabonaLeltar</string>
+    <string name="app_name">Alimento</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="purchase">Vásárlás</string>
+    <string name="purchase">Új Vásárlás</string>
     <string name="transactions">Tranzakciók</string>
     <string name="storage">Raktár</string>
-    <string name="diagram">Diagram</string>
+    <string name="diagram">Forgalom</string>
     <string name="name">name</string>
     <string name="amount">amount</string>
     <string name="price">price</string>
