@@ -2,6 +2,7 @@ package hu.bme.aut.android.gabonaleltar.diagram
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,19 +14,27 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.ValueFormatter
 import hu.bme.aut.android.gabonaleltar.databinding.FragmentDiagramBinding
 import hu.bme.aut.android.gabonaleltar.transaction.TransactionViewModel
 
 object ChartUtils {
-    fun setBarChartColors(barDataSet: BarDataSet) {
-        // Choose your custom colors for the bars
-        val customColors = intArrayOf(
-            Color.rgb(67, 206, 162),
-            Color.rgb(255, 204, 0),
-            Color.rgb(255, 102, 0),
-            // Add more colors as needed
-        )
+    fun generateDistinctColors(size: Int): IntArray {
+        val colors = IntArray(size)
 
+        val saturation = 0.8f
+        val brightness = 0.8f
+
+        for (i in 0 until size) {
+            val hue = (i * (360 / size)).toFloat()
+            colors[i] = Color.HSVToColor(floatArrayOf(hue, saturation, brightness))
+        }
+
+        return colors
+    }
+
+    fun setBarChartColors(barDataSet: BarDataSet) {
+        val customColors = generateDistinctColors(barDataSet.entryCount)
         barDataSet.setColors(*customColors)
     }
 }
@@ -38,29 +47,48 @@ class DiagramFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDiagramBinding.inflate(inflater, container, false)
-        binding.toolbar.title = "Forgalom Diagram"
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         val barChart: BarChart = binding.chartGrains
 
         transactionViewModel = ViewModelProvider(requireActivity()).get(TransactionViewModel::class.java)
 
-        val dataSet = BarDataSet(emptyList(), "Months")
+        val dataSet = BarDataSet(emptyList(), "Napok")
         ChartUtils.setBarChartColors(dataSet)
 
         val barData = BarData(dataSet)
         barChart.data = barData
 
-        transactionViewModel.getTransactionItemsByMonth()
-            .observe(viewLifecycleOwner, Observer { monthTransactions ->
+        barChart.setDrawBarShadow(false)
+        barChart.setDrawValueAboveBar(true)
+        barChart.description.isEnabled = false
+        barChart.xAxis.setDrawGridLines(false)
+        barChart.xAxis.setDrawAxisLine(true)
+        barChart.xAxis.setDrawLabels(true)
+        barChart.axisLeft.setDrawGridLines(false)
+        barChart.axisLeft.setDrawAxisLine(true)
+        barChart.axisLeft.setDrawLabels(true)
+        barChart.axisRight.isEnabled = false
+        barChart.legend.isEnabled = true
+        barChart.animateY(1000)
+
+        transactionViewModel.transactionItemsByDay
+            .observe(viewLifecycleOwner, Observer { dayTransactions ->
+                Log.d("DiagramFragment", "Received data: $dayTransactions")
                 val entries = mutableListOf<BarEntry>()
 
-                for ((month, transactions) in monthTransactions) {
+                dayTransactions.forEachIndexed { index, (day, transactions) ->
                     val totalAmount = transactions.sumByDouble { it.amount.toDouble() }
-                    entries.add(BarEntry(month.toFloat(), totalAmount.toFloat()))
+                    entries.add(BarEntry(index.toFloat(), totalAmount.toFloat()))
                 }
 
-                dataSet.values = entries
+                val dataSet = BarDataSet(entries, "Days")
+                ChartUtils.setBarChartColors(dataSet)
+
+                val barData = BarData(dataSet)
+
+                barData.setValueTextSize(14f)
+
+                barChart.data = barData
                 barChart.invalidate()
             })
 

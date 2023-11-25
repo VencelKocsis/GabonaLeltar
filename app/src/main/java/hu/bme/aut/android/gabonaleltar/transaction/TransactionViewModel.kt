@@ -1,9 +1,9 @@
 package hu.bme.aut.android.gabonaleltar.transaction
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import hu.bme.aut.android.gabonaleltar.data.GrainDatabase
@@ -19,19 +19,65 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     private val transactionItemDao: TransactionItemDAO
     private val allTransactionItems: LiveData<List<TransactionItem>>
     private val selectedTransactionItems = MutableLiveData<List<TransactionItem>?>()
-    private val transactionItemsByMonth = MediatorLiveData<List<Pair<Int, List<TransactionItem>>>>()
-
+    val transactionItemsByDay = MutableLiveData<List<Pair<Long, List<TransactionItem>>>>()
     init {
         val database = GrainDatabase.getInstance(application)
         transactionItemDao = database.transactionDao()
         allTransactionItems = transactionItemDao.getAll()
 
-        transactionItemsByMonth.addSource(allTransactionItems) { transactions ->
-            val groupedTransactions = transactions.groupBy { calculateMonth(it.date) }
-                .toList()
-                .sortedByDescending { it.first }
-            transactionItemsByMonth.value = groupedTransactions
+        TestData()
+
+        allTransactionItems.observeForever { transactions ->
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    val groupedTransactions = transactions.groupBy { calculateDay(it.date) }
+                        .toList()
+                        .sortedByDescending { it.first }
+                    transactionItemsByDay.postValue(groupedTransactions)
+                    Log.d("TransactionViewModel", "Data updated: $groupedTransactions")
+                }
+            }
         }
+    }
+
+    private fun TestData() {
+        val transactions = mutableListOf<TransactionItem>()
+
+        val currentDate = System.currentTimeMillis()
+        val grainIds = listOf(1, 2, 3) // Assuming you have at least 3 grain items
+
+        for (day in 0 until 10) {
+            for (grainId in grainIds) {
+                transactions.add(
+                    TransactionItem(
+                        date = currentDate - day * 24 * 60 * 60 * 1000,
+                        grainId = grainId.toLong(),
+                        amount = (1..5).random().toDouble(), // Random amount between 1 and 5
+                        totalCost = (10..50).random() // Random total cost between 10 and 50
+                    )
+                )
+            }
+        }
+
+        for (transaction in transactions) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    transactionItemDao.insert(transaction)
+                }
+            }
+        }
+
+    }
+
+    private fun calculateDay(date: Long): Long {
+        // Truncate the timestamp to represent the start of the day
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = date
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.timeInMillis
     }
 
     fun insertTransaction(grainItem: GrainItem, purchasedAmount: Int) {
@@ -82,15 +128,5 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 selectedTransactionItems.postValue(filteredTransactions)
             }
         }
-    }
-
-    fun getTransactionItemsByMonth(): LiveData<List<Pair<Int, List<TransactionItem>>>> {
-        return transactionItemsByMonth
-    }
-
-    private fun calculateMonth(date: Long): Int {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = date
-        return calendar.get(Calendar.MONTH)
     }
 }

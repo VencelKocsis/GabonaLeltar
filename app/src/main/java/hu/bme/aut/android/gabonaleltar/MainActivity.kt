@@ -22,13 +22,12 @@ class MainActivity : AppCompatActivity(), ItemPurchaseDialogFragment.PurchaseIte
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.setTitle("Gabona Leltár")
-        setSupportActionBar(binding.toolbar)
+        supportActionBar?.hide()
 
         sharedViewModel = ViewModelProvider(this).get(GrainViewModel::class.java)
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
 
-        binding
+
     }
 
     override fun onGrainItemPurchased(grainItem: GrainItem, purchasedAmount: Int) {
