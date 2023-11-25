@@ -32,9 +32,8 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 withContext(Dispatchers.IO) {
                     val groupedTransactions = transactions.groupBy { calculateDay(it.date) }
                         .toList()
-                        .sortedByDescending { it.first }
+                        .sortedBy { it.first }
                     transactionItemsByDay.postValue(groupedTransactions)
-                    Log.d("TransactionViewModel", "Data updated: $groupedTransactions")
                 }
             }
         }
@@ -46,7 +45,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
         val currentDate = System.currentTimeMillis()
         val grainIds = listOf(1, 2, 3) // Assuming you have at least 3 grain items
 
-        for (day in 0 until 10) {
+        for (day in 0 until 100) {
             for (grainId in grainIds) {
                 transactions.add(
                     TransactionItem(
