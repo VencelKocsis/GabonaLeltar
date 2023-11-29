@@ -1,8 +1,10 @@
 package hu.bme.aut.android.gabonaleltar
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import hu.bme.aut.android.gabonaleltar.data.GrainItem
 import hu.bme.aut.android.gabonaleltar.databinding.ActivityMainBinding
@@ -23,6 +25,10 @@ class MainActivity : AppCompatActivity(), ItemPurchaseDialogFragment.PurchaseIte
         setContentView(binding.root)
 
         supportActionBar?.hide()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = ContextCompat.getColor(this, R.color.statusBarColor)
+        }
 
         sharedViewModel = ViewModelProvider(this).get(GrainViewModel::class.java)
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)

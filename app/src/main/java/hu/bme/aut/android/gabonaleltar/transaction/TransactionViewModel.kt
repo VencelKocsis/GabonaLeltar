@@ -38,7 +38,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
             }
         }
     }
-
+/** Diagram Teszteléséhez */
     private fun TestData() {
         val transactions = mutableListOf<TransactionItem>()
 
