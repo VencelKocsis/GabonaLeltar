@@ -76,7 +76,7 @@ class GrainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val grainItems: List<GrainItem> = listOf(
         GrainItem(0, "búza", 1000, 100, R.drawable.ic_grain_default_foreground),
-        GrainItem(1, "árpa", 900, 80, R.drawable.ic_grain_default_foreground),
+        GrainItem(1, "árpa", 900, 80, R.mipmap.ic_barley_round),
         GrainItem(2, "kukorica", 1200, 120, R.drawable.ic_grain_default_foreground),
         GrainItem(3, "napraforgó", 1500, 150, R.drawable.ic_grain_default_foreground),
         GrainItem(4, "csíkos napraforgó", 1600, 160, R.drawable.ic_grain_default_foreground),
