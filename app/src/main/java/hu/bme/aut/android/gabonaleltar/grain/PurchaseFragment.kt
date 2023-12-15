@@ -29,7 +29,7 @@ class PurchaseFragment : Fragment(), ItemPurchaseDialogFragment.PurchaseItemDial
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         /** Akkor kell csak ha módosítjuk a magok listáját, és wipe data után betöltjük az adatbázisba*/
-        //sharedViewModel.insertGrainItems()
+        sharedViewModel.insertGrainItems()
 
         initRecyclerView()
 
