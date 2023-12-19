@@ -107,7 +107,7 @@ class GrainViewModel(application: Application) : AndroidViewModel(application) {
         GrainItem(29, "gazdaságos magkeverék", 1600, 160, R.mipmap.ic_sparrow_mix),
         GrainItem(30, "rc magkeverék", 1700, 170, R.mipmap.ic_chickadee_mix),
         GrainItem(31, "speciál magkeverék", 1800, 180, R.mipmap.ic_pigeon_mix),
-        GrainItem(32, "prémium magkeverék", 1900, 190, R.mipmap.ic_golden_pigeon_mix),
+        GrainItem(32, "prémium magkeverék", 1900, 190, R.mipmap.ic_golden_pigeon),
         GrainItem(33, "tyúk magkeverék", 2000, 200, R.mipmap.ic_hen_mix),
         GrainItem(34, "csibedara", 1600, 160, R.mipmap.ic_chicks_mix)
     )
