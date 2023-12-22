@@ -21,3 +21,11 @@ data class TransactionItem (
     @ColumnInfo(name = "amount") var amount: Double,
     @ColumnInfo(name = "totalCost") var totalCost: Int
 )
+
+data class BusketItem (
+    var id: Long?,
+    var name: String,
+    var amount: Int,
+    var price: Int,
+    var imageResourceId: Int
+)

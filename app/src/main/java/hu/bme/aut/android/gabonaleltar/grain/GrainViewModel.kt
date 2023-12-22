@@ -4,8 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import hu.bme.aut.android.gabonaleltar.MainActivity
 import hu.bme.aut.android.gabonaleltar.R
+import hu.bme.aut.android.gabonaleltar.data.BusketItem
 import hu.bme.aut.android.gabonaleltar.data.GrainDatabase
 import hu.bme.aut.android.gabonaleltar.data.GrainItem
 import hu.bme.aut.android.gabonaleltar.data.GrainItemDAO
@@ -71,6 +74,12 @@ class GrainViewModel(application: Application) : AndroidViewModel(application) {
         } else {
             Log.d("GrainItem", "Not enough grain in stock for ${grainItem.name}")
             return false
+        }
+    }
+
+    suspend fun getGrainItemByName(grainItemName: String): GrainItem? {
+        return withContext(Dispatchers.IO) {
+            grainItemDao.getGrainByName(grainItemName)
         }
     }
 

@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import hu.bme.aut.android.gabonaleltar.R
 import hu.bme.aut.android.gabonaleltar.adapter.GrainAdapter
+import hu.bme.aut.android.gabonaleltar.busket.BusketFragment
 import hu.bme.aut.android.gabonaleltar.data.GrainItem
 import hu.bme.aut.android.gabonaleltar.databinding.FragmentPurchaseBinding
 
@@ -32,6 +35,10 @@ class PurchaseFragment : Fragment(), ItemPurchaseDialogFragment.PurchaseItemDial
         //sharedViewModel.insertGrainItems()
 
         initRecyclerView()
+
+        binding.fabShowBasket.setOnClickListener {
+            findNavController().navigate(R.id.action_purchaseFragment_to_busketFragment)
+        }
 
         return binding.root
     }

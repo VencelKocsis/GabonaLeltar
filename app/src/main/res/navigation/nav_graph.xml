@@ -27,7 +27,11 @@
         android:id="@+id/purchaseFragment"
         android:name="hu.bme.aut.android.gabonaleltar.grain.PurchaseFragment"
         android:label="fragment_purchase"
-        tools:layout="@layout/fragment_purchase" />
+        tools:layout="@layout/fragment_purchase" >
+        <action
+            android:id="@+id/action_purchaseFragment_to_busketFragment"
+            app:destination="@id/busketFragment" />
+    </fragment>
     <fragment
         android:id="@+id/transactionFragment"
         android:name="hu.bme.aut.android.gabonaleltar.transaction.TransactionFragment"
@@ -43,4 +47,9 @@
         android:name="hu.bme.aut.android.gabonaleltar.diagram.DiagramFragment"
         android:label="fragment_diagram"
         tools:layout="@layout/fragment_diagram" />
+    <fragment
+        android:id="@+id/busketFragment"
+        android:name="hu.bme.aut.android.gabonaleltar.busket.BusketFragment"
+        android:label="fragment_busket"
+        tools:layout="@layout/fragment_busket" />
 </navigation>
