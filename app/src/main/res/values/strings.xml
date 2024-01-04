@@ -31,4 +31,5 @@
     <string name="_100">100</string>
     <string name="busket_content">Kosár tartalma:</string>
     <string name="sum">Fizetendő:</string>
+    <string name="hint_amount">Adja meg a tömeget: (kg)</string>
 </resources>
